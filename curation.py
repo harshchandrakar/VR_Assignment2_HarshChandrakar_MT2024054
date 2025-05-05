@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 # ========================
 CONFIG = {
     "BASE_DIR": "./abo-images-small/",
-    "METADATA_PATH": os.path.join("./csv_files/", "balanced_part1_18000.csv"),
+    "METADATA_PATH": os.path.join("./csv_files/", "balanced_part2_18000.csv"),
     "LLAVA_VERSIONS": {
         "llava:7b": {
             "num_ctx": 2048,
@@ -31,7 +31,7 @@ CONFIG = {
     "SELECTED_MODEL": "llava:7b",
     "MIN_QUESTIONS_PER_IMAGE": 2,
     "MAX_QUESTIONS_PER_IMAGE": 5,
-    "SAMPLE_PERCENTAGE": 0.0001,
+    "SAMPLE_PERCENTAGE": 0.001,
     "IMAGE_PROCESSING": {
         "target_size": (336, 336),
         "quality": 75,
