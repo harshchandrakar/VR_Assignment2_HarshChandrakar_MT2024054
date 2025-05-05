@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 # ========================
 CONFIG = {
     "BASE_DIR": "./abo-images-small/",
-    "METADATA_PATH": os.path.join("./csv_files/", "balanced.csv"),
+    "METADATA_PATH": os.path.join("./csv_files/", "balanced_part1_18000.csv"),
     "LLAVA_VERSIONS": {
         "llava:7b": {
             "num_ctx": 2048,
@@ -31,7 +31,7 @@ CONFIG = {
     "SELECTED_MODEL": "llava:7b",
     "MIN_QUESTIONS_PER_IMAGE": 2,
     "MAX_QUESTIONS_PER_IMAGE": 5,
-    "SAMPLE_PERCENTAGE": 1,
+    "SAMPLE_PERCENTAGE": 0.0001,
     "IMAGE_PROCESSING": {
         "target_size": (336, 336),
         "quality": 75,
@@ -220,11 +220,47 @@ def generate_visual_questions(image_b64, metadata_row, current_model):
 
     return qa_pairs[:CONFIG["MAX_QUESTIONS_PER_IMAGE"]]
 
+def visualize_qa_samples(df, num_samples):
+    """Visualize sample QA pairs for validation"""
+    try:
+        if len(df) == 0 or 'Image_Path' not in df.columns:
+            print("No data available for visualization")
+            return
+            
+        num_samples = min(num_samples, len(df))
+        samples = df.sample(n=num_samples)
+        
+        fig, axes = plt.subplots(num_samples, 1, figsize=(10, 5*num_samples))
+        if num_samples == 1:
+            axes = [axes]
+            
+        for i, (_, row) in enumerate(samples.iterrows()):
+            try:
+                img_path = os.path.join(CONFIG["BASE_DIR"], "images/small", row["Image_Path"])
+                img = Image.open(img_path)
+                axes[i].imshow(img)
+                axes[i].set_title(f"Q: {row['Question']}\nA: {row['Correct_Answer']}")
+                axes[i].axis('off')
+            except Exception as e:
+                axes[i].text(0.5, 0.5, f"Error loading image: {str(e)}", ha='center')
+                
+        plt.tight_layout()
+        plt.savefig("./output_csv/qa_samples.png")
+        plt.close()
+    except Exception as e:
+        print(f"Visualization error: {str(e)}")
 
-def process_image(row):
+# ========================
+# MAIN PROCESSING
+# ========================
+def process_image(idx, row):
     """Image processing pipeline"""
+    global processed_count
     try:
         image_path = os.path.join(CONFIG["BASE_DIR"], "images/small", row["image_path"])
+        if idx % 10 == 0:
+            print(f"--------------- Processing image {idx} ---------------")
+            
         if not os.path.exists(image_path):
             return []
             
@@ -241,27 +277,36 @@ def process_image(row):
         print(f"Error processing {row['image_path']}: {str(e)}")
         return []
 
-# ========================
-# MAIN PROCESSING
-# ========================
 if __name__ == "__main__":
+    # Initialize counter for tracking progress
+    processed_count = 0
+    
+    # Load and prepare metadata
     metadata = pd.read_csv(CONFIG["METADATA_PATH"])
     valid_metadata = metadata[pd.notna(metadata["image_path"])].sample(frac=CONFIG["SAMPLE_PERCENTAGE"])
-    
     print(f"Processing {len(valid_metadata)} images")
     
+    # Process images with proper indexing
+    # results = []
+    # for idx, (_, row) in enumerate(valid_metadata.iterrows()):
+    #     results.append(process_image(idx, row))
+        
+    # Alternative approach using ThreadPoolExecutor
     with ThreadPoolExecutor(max_workers=CONFIG["MAX_WORKERS"]) as executor:
         results = list(executor.map(
-            lambda row: process_image(row[1]), 
-            valid_metadata.iterrows()
+            lambda x: process_image(x[0], x[1][1]), 
+            enumerate(valid_metadata.iterrows())
         ))
     
+    # Flatten results and save
     all_qa = [qa for sublist in results for qa in sublist]
     df = pd.DataFrame(all_qa)
     
     if not df.empty:
-        df.to_csv("./output_csv/enhanced_vqa_dataset.csv", index=False)
+        output_dir = "./output_csv"
+        os.makedirs(output_dir, exist_ok=True)
+        df.to_csv(f"{output_dir}/enhanced_vqa_dataset_1.csv", index=False)
         print(f"Generated {len(df)} QA pairs")
-        visualize_qa_samples(df,4)
+        # visualize_qa_samples(df, CONFIG["MAX_VISUALIZATION_SAMPLES"])
     else:
         print("No valid QA pairs generated")

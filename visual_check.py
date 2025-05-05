@@ -4,6 +4,9 @@ import time
 from PIL import Image
 import matplotlib.pyplot as plt
 
+CONFIG = {
+    "BASE_DIR": "./abo-images-small/",}
+
 # ========================
 # VISUALIZATION
 # ========================
@@ -50,6 +53,6 @@ def visualize_qa_samples(df, num_images=None):
 
 if __name__ == "__main__":
 
-    path = "./output_csv/"
+    path = "./output_csv/enhanced_vqa_dataset_1.csv"
     df = pd.read_csv(path)
     visualize_qa_samples(df,4)
