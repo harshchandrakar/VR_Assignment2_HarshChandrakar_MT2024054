@@ -31,7 +31,7 @@ CONFIG = {
     "SELECTED_MODEL": "llava:7b",
     "MIN_QUESTIONS_PER_IMAGE": 2,
     "MAX_QUESTIONS_PER_IMAGE": 5,
-    "SAMPLE_PERCENTAGE": 0.0001,
+    "SAMPLE_PERCENTAGE": 1,
     "IMAGE_PROCESSING": {
         "target_size": (336, 336),
         "quality": 75,
