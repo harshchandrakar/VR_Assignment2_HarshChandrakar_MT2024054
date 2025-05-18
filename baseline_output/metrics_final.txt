@@ -1,0 +1,5 @@
+valid_predictions: 1.0000
+exact_match: 0.3145
+bleu: 0.4358
+partial_match: 0.4598
+bertscore_f1: 0.8862
