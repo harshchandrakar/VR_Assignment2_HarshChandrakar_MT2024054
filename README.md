@@ -89,10 +89,7 @@ The performance of the baseline and LoRA fine-tuned BLIP-2 models was evaluated 
 **Discussion:**
 LoRA fine-tuning led to improvements in Exact Match and Partial Match, indicating better lexical precision for single-word answers. However, a notable decrease was observed in BLEU Score and BERTScore F1. This suggests that while the fine-tuned model became more adept at predicting the exact single-word answers from our curated dataset, it might have lost some of the baseline model's generality, impacting metrics sensitive to n-gram overlap or broader semantic similarity for answers that are not exact lexical matches.
 
-## 7. Directory Structure (Suggested)
-
-.├── data/                               # Curated datasets and splits│   ├── simplified_vqa_dataset.csv│   ├── balanced_part1_18000.csv│   └── ...├── notebooks/                          # Jupyter notebooks│   ├── data_curation.ipynb│   ├── baseline_blip2.ipynb│   └── lora-blip2_finetuned.ipynb├── scripts/                            # Python scripts│   ├── data_split.py│   ├── inference.py│   └── visual_check.py├── results/                            # Metric files and model outputs│   ├── metrics_final.txt│   ├── FinetunedMetrics.txt│   ├── blip2_baseline_results_final.csv│   └── ...├── report/                             # Project report│   └── VR_Final_Project_Report.pdf├── saved_models/                       # (Optional) For storing fine-tuned model adapters│   └── blip2-lora-final/├── requirements.txt                    # Python dependencies└── README.md                           # This file
-## 8. Setup and Installation
+## 7. Setup and Installation
 
 1.  **Clone the repository:**
     ```bash
@@ -110,20 +107,20 @@ LoRA fine-tuning led to improvements in Exact Match and Partial Match, indicatin
     ```
     Key dependencies include `torch`, `transformers`, `peft`, `pandas`, `nltk`, `scikit-learn`, `Pillow`, `tqdm`, `accelerate`, `bitsandbytes` (if used for quantization during loading). Ensure CUDA is set up correctly if using GPUs.
 
-## 9. Usage / Running the Code
+## 8. Usage / Running the Code
 
-### 9.1. Data Curation
+### 8.1. Data Curation
 * Open and run the `notebooks/data_curation.ipynb` notebook.
 * This notebook details the process of generating questions and answers using Gemini API and LLaVA, and creating the `simplified_vqa_dataset.csv`.
 * Ensure you have API keys set up for Gemini if you are re-running the generation.
 * The `scripts/data_split.py` can be used to split the dataset.
 
-### 9.2. Baseline Evaluation
+### 8.2. Baseline Evaluation
 * Open and run the `notebooks/baseline_blip2.ipynb` notebook.
 * This will load the pre-trained BLIP-2 model and evaluate its performance on the test set.
 * Results (metrics and predictions) are typically saved to files in the `results/` directory.
 
-### 9.3. LoRA Fine-tuning
+### 8.3. LoRA Fine-tuning
 * Open and run the `notebooks/lora-blip2_finetuned.ipynb` notebook.
 * This notebook handles:
     * Loading the base BLIP-2 model.
@@ -132,7 +129,7 @@ LoRA fine-tuning led to improvements in Exact Match and Partial Match, indicatin
     * Saving the fine-tuned LoRA adapter (e.g., to `/kaggle/working/blip2-lora-final` or a local `saved_models/` directory).
 * This process requires a GPU and was performed on Kaggle.
 
-### 9.4. Inference
+### 8.4. Inference
 * The `scripts/inference.py` script is used to perform VQA on new images using the fine-tuned model.
 * **Example Usage:**
     ```bash
@@ -145,7 +142,7 @@ LoRA fine-tuning led to improvements in Exact Match and Partial Match, indicatin
 * The script will load the base model, apply the LoRA adapter, process the input, and print the generated answer.
 * The inference script in the fine-tuning notebook (`lora-blip2_finetuned.ipynb`) also contains extensive post-processing logic for refining answers.
 
-## 10. Future Work
+## 9. Future Work
 
 (Refer to Section 6 of `report/VR_Final_Project_Report.pdf` for a detailed list)
 * Expand dataset with multiple-choice options.
@@ -154,7 +151,7 @@ LoRA fine-tuning led to improvements in Exact Match and Partial Match, indicatin
 * Explore alternative base models.
 * Adapt the system for multi-word answers.
 
-## 11. References
+## 10. References
 
 A full list of references is available in the project report (`report/VR_Final_Project_Report.pdf`). Key references include:
 * BLIP-2: Li, J., et al. (2023).
@@ -162,5 +159,5 @@ A full list of references is available in the project report (`report/VR_Final_P
 * Amazon Berkeley Objects (ABO) Dataset.
 * Hugging Face PEFT Library.
 
-## 12. Acknowledgements
+## 11. Acknowledgements
 This project was undertaken as part of the AIM825 course at the International Institute of Information Technology, Bangalore.
