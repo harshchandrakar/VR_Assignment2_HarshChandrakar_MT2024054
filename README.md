@@ -7,6 +7,8 @@
 * Akshay Sharma (MT2024016)
 * Shashank Vyas (MT2024141)
 
+[Report](VR_Final_Project_Report.pdf)
+
 ## 1. Overview
 
 This project focuses on developing a Visual Question Answering (VQA) system tailored to the Amazon Berkeley Objects (ABO) dataset. The core contributions include the creation of a custom VQA dataset from ABO images with single-word answers, evaluation of a baseline BLIP-2 model, and subsequent fine-tuning of BLIP-2 using Low-Rank Adaptation (LoRA) to enhance its performance on this specific task. The system aims to understand an image and a natural language question about it, generating a concise, single-word answer.
