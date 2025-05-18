@@ -105,7 +105,7 @@ LoRA fine-tuning led to improvements in Exact Match and Partial Match, indicatin
     ```bash
     pip install -r requirements.txt
     ```
-    Key dependencies include `torch`, `transformers`, `peft`, `pandas`, `nltk`, `scikit-learn`, `Pillow`, `tqdm`, `accelerate`, `bitsandbytes` (if used for quantization during loading). Ensure CUDA is set up correctly if using GPUs.
+    Key dependencies include `torch`, `transformers`, `peft`, `pandas`, `nltk`, `scikit-learn`, `Pillow`, `tqdm`, `accelerate`. Ensure CUDA is set up correctly if using GPUs.
 
 ## 8. Usage / Running the Code
 
@@ -133,12 +133,11 @@ LoRA fine-tuning led to improvements in Exact Match and Partial Match, indicatin
 * The `scripts/inference.py` script is used to perform VQA on new images using the fine-tuned model.
 * **Example Usage:**
     ```bash
-    python scripts/inference.py --image_path "/path/to/your/image.jpg" --question "What color is the object?" --model_path "/path/to/your/fine-tuned-lora-adapter" --base_model_name "Salesforce/blip2-flan-t5-xl"
+    python scripts/inference.py --image_path "/path/to/your/data" --csv_path "/path/to/your/csv/file""
     ```
-    * `--image_path`: Path to the input image.
-    * `--question`: The question about the image.
-    * `--model_path`: Path to the directory containing the saved LoRA adapter weights (e.g., the output from `lora-blip2_finetuned.ipynb`). If the model was pushed to Hugging Face Hub, this could be the Hub model ID.
-    * `--base_model_name`: The name of the base BLIP-2 model (default: `Salesforce/blip2-flan-t5-xl`).
+    * `--image_path`: Path to the imag folder.
+    * `--csv_path`: Path to the metadat.csv.
+
 * The script will load the base model, apply the LoRA adapter, process the input, and print the generated answer.
 * The inference script in the fine-tuning notebook (`lora-blip2_finetuned.ipynb`) also contains extensive post-processing logic for refining answers.
 
